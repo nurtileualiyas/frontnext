@@ -147,18 +147,19 @@ const Crud = () => {
             let _banners = [...banners];
             let _banner = { ...banner };
             let requestUrl = '';
-            let requestMethod = ''
+            let requestMethod = '';
+
+            _banner.activate_at = isIsoDate(_banner.activate_at) ? _banner.activate_at.substring(0, 10) : _banner.activate_at.toISOString().substring(0, 10);
+            _banner.deactivate_at = isIsoDate(_banner.deactivate_at) ? _banner.deactivate_at.substring(0, 10) : _banner.deactivate_at.toISOString().substring(0, 10);
+
+            console.log(_banner);
 
             if (!editBannerStatus) {
                 requestUrl = 'http://almaback.almatv.kz/api/banners';
                 requestMethod = 'POST';
-                _banner.activate_at = _banner.activate_at.toISOString().substring(0, 10);
-                _banner.deactivate_at = _banner.deactivate_at.toISOString().substring(0, 10);
             } else {
                 requestUrl = 'http://almaback.almatv.kz/api/banners/' + _banner.id;
                 requestMethod = 'PUT';
-                _banner.activate_at = _banner.activate_at.substring(0, 10);
-                _banner.deactivate_at = _banner.deactivate_at.substring(0, 10);
 
                 delete _banner.created_at;
                 delete _banner.updated_at;
@@ -254,6 +255,11 @@ const Crud = () => {
 
         return index;
     };
+
+    const isIsoDate = (str) => {
+        if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+        return true;
+    }
 
     const createId = () => {
         let id = '';
@@ -440,7 +446,7 @@ const Crud = () => {
         return (
             <>
                 <span className="p-column-title">Путь</span>
-                {rowData.activate_at}
+                {rowData.deactivate_at}
             </>
         );
     };
